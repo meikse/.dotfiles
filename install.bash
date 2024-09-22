@@ -26,7 +26,9 @@ echo -e "\e[32mInstalled tmux successfully.\e[0m"
 # install tpm (tmux plugin manager)
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 # run tpm to install plugins
-tmux new-session -d -s tpm_install "bash -c 'sleep 1; tmux run-shell ~/.tmux/plugins/tpm/scripts/install_plugins.sh; tmux kill-session'"
+# tmux new-session -d -s tpm_install "bash -c 'sleep 1; tmux run-shell ~/.tmux/plugins/tpm/scripts/install_plugins.sh; tmux kill-session'"
+tmux source ~/.tmux.conf
+~/.tmux/plugins/tpm/scripts/install_plugins.sh
 echo -e "\e[32mTmux Plugin Manager installed and plugins are being installed...\e[0m"
 
 # install neovim (old but stable)
@@ -42,7 +44,8 @@ curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
 
 # install neovim plugins
 echo -e "\e[31mInstalling Neovim plugins...\e[0m"
-nvim ~/.config/nvim/init.vim -c ":PlugInstall" -c ":qa"
+# nvim ~/.config/nvim/init.vim -c ":PlugInstall | qa"
+nvim +PlugInstall +qa
 echo -e "\e[32mNeovim plugins installed successfully.\e[0m"
 
 # create global config variable
