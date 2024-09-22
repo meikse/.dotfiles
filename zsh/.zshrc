@@ -8,4 +8,4 @@ export LANG=en_US.UTF-8
 VI_MODE_SET_CURSOR=true
 bindkey -v
 
-[ -f ~/.fzf.zsh ]&& source ~/.fzf.zsh
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
