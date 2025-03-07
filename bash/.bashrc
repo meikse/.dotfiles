@@ -90,7 +90,7 @@ fi
 # some more ls aliases
 alias ll='ls -alF'
 alias la='ls -A'
-alias l='ls -CF'
+alias l='ls -lah'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
@@ -147,3 +147,51 @@ bind '"\C-p": history-search-backward'
 bind 'set show-mode-in-prompt on'
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+export ROS_WS="$HOME/Code/ROS/humble/grow_ws"
+
+alias ros="source $HOME/ros_init.bash"
+alias launch="source $HOME/launch.bash"
+
+# avoid duplicates..
+export HISTCONTROL=ignoredups:erasedups
+
+# append history entries..
+shopt -s histappend
+
+# After each command, save and reload history
+export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
+
+export NVM_DIR="$HOME/.config/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# . "$HOME/.cargo/env"
+
+ # Macros to enable yanking, killing and putting to and from the system clipboard in vi-mode. Only supports yanking and killing the whole line.
+paste_from_clipboard () {
+  local shift=$1
+
+  local head=${READLINE_LINE:0:READLINE_POINT+shift}
+  local tail=${READLINE_LINE:READLINE_POINT+shift}
+
+  local paste=$(xclip -out -selection clipboard)
+  local paste_len=${#paste}
+
+  READLINE_LINE=${head}${paste}${tail}
+  # Place caret before last char of paste (as in vi)
+  let READLINE_POINT+=$paste_len+$shift-1
+}
+
+yank_line_to_clipboard () {
+  echo $READLINE_LINE | xclip -in -selection clipboard
+}
+
+kill_line_to_clipboard () {
+  yank_line_to_clipboard
+  READLINE_LINE=""
+}
+
+bind -m vi-command -x '"P": paste_from_clipboard 0'
+bind -m vi-command -x '"p": paste_from_clipboard 1'
+bind -m vi-command -x '"yy": yank_line_to_clipboard'
+bind -m vi-command -x '"dd": kill_line_to_clipboard'
